@@ -8,6 +8,7 @@ class DynamicTable {
         this.limitNode = this._getLimitNode();
         this.countNode = this._getNode(`div`);
         this.bodyNode = this._getNode(`tbody`, { id: `tBody` });
+        this.checkBoxArray=[];
     }
 
     createTable() {
@@ -44,17 +45,17 @@ class DynamicTable {
         }
     }
 
-    _checkboxToggle(divisionName) {
+    _checkboxToggle(divisionName,checkboxNode) {
         let { checkboxClass } = this.paramObject;
         let currentNodeId, isChecked;
+        let checkBoxArray=this.checkBoxArray;
         if (checkboxClass) {
-            document.getElementById(`${checkboxClass}_${divisionName}`).onclick = function() {
+            checkboxNode.onclick = function() {
                 currentNodeId = this.id.split(`_`)[1];
                 isChecked = this.checked;
-                let checkboxNodes = document.getElementsByClassName(checkboxClass);
-                for (let i = 0; i < checkboxNodes.length; i++) {
-                    checkboxNodes[i].checked = isChecked;
-                }
+                for (let i = 0; i < checkBoxArray.length; i++) {
+                    checkBoxArray[i].checked = isChecked;
+                 }
             }
         }
     }
@@ -164,7 +165,6 @@ class DynamicTable {
             divisionNode.appendChild(trNode);
             this._addData(trNode, `S.No.`, dataArray2, `th`, divisionName);
         }
-        this._checkboxToggle(divisionName);
     }
 
     _addTableDataRows() {
@@ -245,6 +245,9 @@ class DynamicTable {
                 id = `${checkboxClass}_${trAttributes}`;
             }
             let checkboxNode = this._getNode(`input`, { className: `form-control ${checkboxClass}`, id, type: `checkbox` });
+            this.checkBoxArray.push(checkboxNode);
+            if(trAttributes==='thead'||trAttributes==='tfoot')
+            this._checkboxToggle(trAttributes,checkboxNode);
             let checkboxTDNode = this._getNode(typeName, { subNode: checkboxNode });
             rowNode.appendChild(checkboxTDNode);
         }
