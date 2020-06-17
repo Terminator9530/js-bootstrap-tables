@@ -40,8 +40,6 @@ class DynamicTable {
         this._appendTableData();
         if (footData) {
             this._addTableDivision(tableNode, `tfoot`, footData);
-        } else {
-            this._addTableDivision(tableNode, `tfoot`, headData, head2Data);
         }
         return this.divNode;
     }
