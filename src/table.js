@@ -249,7 +249,7 @@ class DynamicTable {
             dataRows,
             addFilter,
             addLimit,
-            showNumberOfEntries
+            addRowCount
         } = this.paramObject;
         let filterTerm;
         if (addFilter) {
@@ -278,7 +278,7 @@ class DynamicTable {
             }
         });
         this._clearNode(this.countNode);
-        if(showNumberOfEntries){
+        if(addRowCount){
             let textNode = document.createTextNode(`Showing 1 to ${limitNumber} of ${serialNumber} entries`);
             this.countNode.appendChild(textNode);
         }
