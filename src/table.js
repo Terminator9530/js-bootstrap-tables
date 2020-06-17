@@ -42,8 +42,9 @@ class DynamicTable {
         if (footData) {
             this._addTableDivision(tableNode, `tfoot`, footData);
         } else {
-            if(headDuplicate)
-            this._addTableDivision(tableNode, `tfoot`, headData, head2Data);
+            if(headDuplicate){
+                this._addTableDivision(tableNode, `tfoot`, headData, head2Data);
+            }
         }
         return this.divNode;
     }
