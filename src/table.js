@@ -25,7 +25,7 @@ class DynamicTable {
             footData,
             addFilter,
             functionArray,
-            headDuplicate
+            addHeadDataAtBottom
         } = this.paramObject;
         if (addFilter) {
             this.divNode.appendChild(this.filterNode);
@@ -42,7 +42,7 @@ class DynamicTable {
         if (footData) {
             this._addTableDivision(tableNode, `tfoot`, footData);
         } else {
-            if(headDuplicate){
+            if(addHeadDataAtBottom){
                 this._addTableDivision(tableNode, `tfoot`, headData, head2Data);
             }
         }
@@ -249,7 +249,7 @@ class DynamicTable {
             dataRows,
             addFilter,
             addLimit,
-            noOfEntries
+            showNumberOfEntries
         } = this.paramObject;
         let filterTerm;
         if (addFilter) {
@@ -278,7 +278,7 @@ class DynamicTable {
             }
         });
         this._clearNode(this.countNode);
-        if(noOfEntries){
+        if(showNumberOfEntries){
             let textNode = document.createTextNode(`Showing 1 to ${limitNumber} of ${serialNumber} entries`);
             this.countNode.appendChild(textNode);
         }
