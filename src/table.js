@@ -21,7 +21,7 @@ class DynamicTable {
         });
         this.checkBoxArray = [];
         this.isClicked=false;
-        this.extra=0;
+        this.extraRowsCount=0;
     }
 
     createTable() {
@@ -69,7 +69,7 @@ class DynamicTable {
         }
         if (addLimit) {
             this.limitNode.onchange = () => {
-                this.extra=0;
+                this.extraRowsCount=0;
                 this._addTableDataRows();
             }
         }
@@ -273,7 +273,7 @@ class DynamicTable {
         let limitNumber = 0;
         let rowNode;
         if(this.isClicked){
-            this.extra+=parseInt(this.limitNode.value);
+            this.extraRowsCount+=parseInt(this.limitNode.value);
         }
         dataRows.forEach(currentRow => {
             let {
@@ -283,7 +283,7 @@ class DynamicTable {
             } = currentRow;
             if (!addFilter || this._filterData(filterTerm, currentRow.data)) {
                 serialNumber++;
-                if (!addLimit || this.limitNode.value === `all` || (parseInt(this.limitNode.value) + this.extra) >= serialNumber) {
+                if (!addLimit || this.limitNode.value === `all` || (parseInt(this.limitNode.value) + this.extraRowsCount) >= serialNumber) {
                     limitNumber++;
                     rowNode = this._getNode(`tr`, {
                         className,
@@ -310,11 +310,11 @@ class DynamicTable {
         if(this.isClicked){
             this.isClicked=false;
         }
-        if(limitNumber==serialNumber){
-            this.loadMore.style.display="none";
+        if(limitNumber===serialNumber){
+            this.loadMore.style.display=`none`;
         }
         else{
-            this.loadMore.style.display="";
+            this.loadMore.style.display=``;
         }
         this._clearNode(this.countNode);
         if(addRowCount){
