@@ -126,7 +126,6 @@ class DynamicTable {
             let textNode = document.createTextNode(`Show `);
             formNode.appendChild(textNode);
             formNode.appendChild(this.limitNode);
-            formNode.appendChild(this.loadMore);
             textNode = document.createTextNode(` entries`);
             formNode.appendChild(textNode);
         }
@@ -262,7 +261,9 @@ class DynamicTable {
             dataRows,
             addFilter,
             addLimit,
-            addRowCount
+            addRowCount,
+            headData,
+            addCheckboxes
         } = this.paramObject;
         let filterTerm;
         if (addFilter) {
@@ -293,6 +294,19 @@ class DynamicTable {
                 }
             }
         });
+        rowNode = this._getNode(`tr`);
+        let colspanForButton=(1+headData.length);
+        if(addCheckboxes){
+            colspanForButton+=1
+        }
+        let columnNode=this._getNode(`td`,{
+            colspan:colspanForButton
+        });
+        let center=this._getNode(`center`);
+        center.appendChild(this.loadMore);
+        columnNode.appendChild(center);
+        rowNode.appendChild(columnNode);
+        this.bodyNode.appendChild(rowNode);
         if(this.isClicked){
             this.isClicked=false;
         }
