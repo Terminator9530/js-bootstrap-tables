@@ -10,11 +10,18 @@ class DynamicTable {
             placeholder: `Type here to search...`
         });
         this.limitNode = this._getLimitNode();
+        this.loadMore = this._getNode('button',{
+            className:`btn btn-primary`,
+            text:`Load More`,
+            type:`button`
+        });
         this.countNode = this._getNode(`div`);
         this.bodyNode = this._getNode(`tbody`, {
             id: `tBody`
         });
         this.checkBoxArray = [];
+        this.isClicked=false;
+        this.extra=0;
     }
 
     createTable() {
@@ -62,8 +69,13 @@ class DynamicTable {
         }
         if (addLimit) {
             this.limitNode.onchange = () => {
+                this.extra=0;
                 this._addTableDataRows();
             }
+        }
+        this.loadMore.onclick=()=>{
+            this.isClicked=true;
+            this._addTableDataRows();
         }
     }
 
@@ -114,6 +126,7 @@ class DynamicTable {
             let textNode = document.createTextNode(`Show `);
             formNode.appendChild(textNode);
             formNode.appendChild(this.limitNode);
+            formNode.appendChild(this.loadMore);
             textNode = document.createTextNode(` entries`);
             formNode.appendChild(textNode);
         }
@@ -258,6 +271,9 @@ class DynamicTable {
         let serialNumber = 0;
         let limitNumber = 0;
         let rowNode;
+        if(this.isClicked){
+            this.extra+=parseInt(this.limitNode.value);
+        }
         dataRows.forEach(currentRow => {
             let {
                 className,
@@ -266,7 +282,7 @@ class DynamicTable {
             } = currentRow;
             if (!addFilter || this._filterData(filterTerm, currentRow.data)) {
                 serialNumber++;
-                if (!addLimit || this.limitNode.value === `all` || this.limitNode.value >= serialNumber) {
+                if (!addLimit || this.limitNode.value === `all` || (parseInt(this.limitNode.value) + this.extra) >= serialNumber) {
                     limitNumber++;
                     rowNode = this._getNode(`tr`, {
                         className,
@@ -277,6 +293,15 @@ class DynamicTable {
                 }
             }
         });
+        if(this.isClicked){
+            this.isClicked=false;
+        }
+        if(limitNumber==serialNumber){
+            this.loadMore.style.display="none";
+        }
+        else{
+            this.loadMore.style.display="";
+        }
         this._clearNode(this.countNode);
         if(addRowCount){
             let textNode = document.createTextNode(`Showing 1 to ${limitNumber} of ${serialNumber} entries`);
